@@ -8,16 +8,21 @@ def handler_kill(signum, frame):
     raise OSError("Killed")
 
 def shell():
-    """does the thing"""
+    """executes the shell"""
     status = 1
     while status == 1:
-#	import pdb;pdb.set_trace()
 	show_prompt()
 	try:
+	    # reads line from user input and stores input in cmd
 	    cmd = sys.stdin.readline()
+	    # determines if user has typed a program interrupt
 	    signal.signal(signal.SIGINT, handler_kill) 
+	    # uses shell-like syntax to split the input
+	    # store in a tokens
 	    tokens = shlex.split(cmd)
+	    # creates a child process
 	    process = subprocess.Popen(tokens)
+	    # wait for process to terminate
 	    status = process.communicate()
 	except:
             _, err, _ = sys.exc_info()
@@ -25,7 +30,7 @@ def shell():
     return 1
 
 def show_prompt():
-    """shows prompt and accepts input"""
+    """shows prompt"""
     sys.stdout.write("$ ")
     sys.stdout.flush()
 
